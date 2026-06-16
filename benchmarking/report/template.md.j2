@@ -1,0 +1,50 @@
+# Benchmark Report: {{ run_id }}
+
+**Date:** {{ timestamp }}
+**Problems:** {{ metrics.total }}
+**Pass Rate:** {{ "%.1f"|format(metrics.pass_rate * 100) }}%
+
+## Summary
+
+| Metric | Value |
+|--------|-------|
+| Total Problems | {{ metrics.total }} |
+| Verified | {{ metrics.verified }} |
+| Failed | {{ metrics.failed }} |
+| Pass Rate | {{ "%.1f"|format(metrics.pass_rate * 100) }}% |
+| Total Time | {{ "%.0f"|format(metrics.timing_seconds.total) }}s |
+| Mean Time/Problem | {{ "%.0f"|format(metrics.timing_seconds.mean) }}s |
+
+## Results by Domain
+
+| Domain | Total | Verified | Pass Rate |
+|--------|-------|----------|-----------|
+{% for domain, stats in metrics.by_domain.items() %}
+| {{ domain }} | {{ stats.total }} | {{ stats.verified }} | {{ "%.0f"|format(stats.verified / stats.total * 100 if stats.total > 0 else 0) }}% |
+{% endfor %}
+
+## Failure Breakdown
+
+| Outcome | Count |
+|---------|-------|
+{% for outcome, count in metrics.by_outcome.items() %}
+| {{ outcome }} | {{ count }} |
+{% endfor %}
+
+## Timing Distribution
+
+| Stat | Seconds |
+|------|---------|
+| Min | {{ metrics.timing_seconds.min }} |
+| Median | {{ metrics.timing_seconds.median }} |
+| Mean | {{ metrics.timing_seconds.mean }} |
+| P95 | {{ metrics.timing_seconds.p95 }} |
+| Max | {{ metrics.timing_seconds.max }} |
+
+## Per-Problem Results
+
+| ID | Domain | Outcome | Duration |
+|----|--------|---------|----------|
+{% for problem, outcome, result in problem_details %}
+| {{ problem.id }} | {{ problem.domain_tag }} | {{ outcome.value }} | {{ "%.0f"|format(result.duration_seconds) }}s |
+{% endfor %}

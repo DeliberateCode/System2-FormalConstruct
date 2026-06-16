@@ -1,0 +1,289 @@
+{
+  "name": "formalconstruct",
+  "version": "0.1.0",
+  "description": "Lean 4 proof formalization guidance: Axioms-Conjecture-Proof pipeline (narrative extraction, scaffolding, iterative proving via AXLE MCP)",
+  "schema_version": "1.0.0",
+  "tags": [
+    "formal-verification",
+    "proof-formalization",
+    "lean4",
+    "theorem-proving"
+  ],
+  "compatibility": {
+    "known_conflicts": [],
+    "tested_with": [],
+    "review_when_combined_with_tags": [
+      "formal-verification"
+    ]
+  },
+  "contributions": {
+    "orchestrator": {
+      "principles": [
+        {
+          "id": "fc-principle-proof-pipeline",
+          "content_file": "contributions/orchestrator/principles.md",
+          "after": null
+        }
+      ]
+    },
+    "agents": {
+      "design-architect": {
+        "prompt_sections": {
+          "design_constraints": [
+            {
+              "id": "fc-architect-constraints",
+              "content_file": "contributions/agents/architect-constraints.md",
+              "inline": false,
+              "summary": "Plan Lean file decomposition, define sorry boundary strategy, specify ProblemSpec-to-Lean construct mappings"
+            }
+          ],
+          "required_output_sections": [
+            {
+              "id": "fc-architect-sections",
+              "content_file": "contributions/agents/architect-sections.md",
+              "inline": false,
+              "summary": "Require Lean Architecture and Sorry Decomposition Strategy sections in design document"
+            }
+          ]
+        }
+      },
+      "spec-coordinator": {
+        "prompt_sections": {
+          "required_context_sections": [
+            {
+              "id": "fc-spec-context",
+              "content_file": "contributions/agents/spec-coordinator-context.md",
+              "inline": false,
+              "summary": "Require context sections for mathematical domain, proof scope, Mathlib dependencies, and Lean environment version"
+            }
+          ],
+          "style_requirements": [
+            {
+              "id": "fc-spec-style",
+              "content_file": "contributions/agents/spec-coordinator-style.md",
+              "inline": false,
+              "summary": "Frame problems using ProblemSpec field vocabulary; use precise mathematical terminology consistent with supported domain families"
+            }
+          ]
+        }
+      },
+      "requirements-engineer": {
+        "prompt_sections": {
+          "guardrails": [
+            {
+              "id": "fc-requirements-guardrails",
+              "content_file": "contributions/agents/requirements-guardrails.md",
+              "inline": false,
+              "summary": "Express proof obligations and formalization constraints in EARS format; map proof goals, sorry replacement, and domain restrictions to EARS patterns"
+            }
+          ]
+        }
+      },
+      "code-reviewer": {
+        "prompt_sections": {
+          "review_criteria": [
+            {
+              "id": "fc-reviewer-criteria",
+              "content_file": "contributions/agents/reviewer-criteria.md",
+              "inline": false,
+              "summary": "Check sorry drift, unused Lean imports, proof completeness, ProblemSpec-to-scaffold consistency"
+            }
+          ],
+          "surface_area_delta": [
+            {
+              "id": "fc-reviewer-surface",
+              "content_file": "contributions/agents/reviewer-surface-area.md",
+              "inline": false,
+              "summary": "Track ProblemSpec schema field changes, Lean import set changes, theorem signature modifications, sorry-site count changes"
+            }
+          ],
+          "simplification_criteria": [
+            {
+              "id": "fc-reviewer-simplification",
+              "content_file": "contributions/agents/reviewer-simplification.md",
+              "inline": false,
+              "summary": "Flag removable Lean imports, over-decomposed proofs, redundant type class hypotheses"
+            }
+          ]
+        }
+      },
+      "executor": {
+        "prompt_sections": {
+          "safety_rules": [
+            {
+              "id": "fc-executor-safety",
+              "content_file": "contributions/agents/executor-safety.md",
+              "inline": false,
+              "summary": "Prohibit sorry in output, prohibit unsafe native bindings, require explicit lean-4.29.0 environment on every AXLE call"
+            }
+          ],
+          "implementation_discipline": [
+            {
+              "id": "fc-executor-discipline",
+              "content_file": "contributions/agents/executor-discipline.md",
+              "inline": false,
+              "summary": "Proof stage implementation discipline: iterative sorry replacement via AXLE tools with 8-tactic budget per goal, 2-repair escalation limit, and decomposition fallback. Covers AXLE tool calling patterns, repair escalation, and sub-goal decomposition."
+            }
+          ],
+          "verification_rules": [
+            {
+              "id": "fc-executor-verification",
+              "content_file": "contributions/agents/executor-verification.md",
+              "inline": false,
+              "summary": "Call verify_proof as final gate after all sorry tokens replaced; report structured failure on proof completion failure"
+            }
+          ]
+        }
+      },
+      "task-planner": {
+        "prompt_sections": {
+          "planning_rules": [
+            {
+              "id": "fc-planner-rules",
+              "content_file": "contributions/agents/task-planner-rules.md",
+              "inline": false,
+              "summary": "Model proof obligations as tasks, scope tactic work per task, identify AXLE tool dependencies per task"
+            }
+          ],
+          "task_fields": [
+            {
+              "id": "fc-planner-fields",
+              "content_file": "contributions/agents/task-planner-fields.md",
+              "inline": false,
+              "summary": "Include target sorry site, required AXLE tools, tactic budget, and expected proof strategy per task"
+            }
+          ]
+        }
+      },
+      "test-engineer": {
+        "prompt_sections": {
+          "verification_workflow": [
+            {
+              "id": "fc-test-workflow",
+              "content_file": "contributions/agents/test-engineer-workflow.md",
+              "inline": false,
+              "summary": "Use verify_proof as primary verification gate, check compilation before verification, validate no sorry tokens in final output"
+            }
+          ],
+          "test_authoring_rules": [
+            {
+              "id": "fc-test-authoring",
+              "content_file": "contributions/agents/test-engineer-authoring.md",
+              "inline": false,
+              "summary": "Maintain golden narrative-to-proof corpus, write compilation-check tests for scaffolded output, write sorry-free assertion tests"
+            }
+          ]
+        }
+      },
+      "docs-release": {
+        "prompt_sections": {
+          "writing_rules": [
+            {
+              "id": "fc-docs-writing",
+              "content_file": "contributions/agents/docs-writing.md",
+              "inline": false,
+              "summary": "Document proof completion status, supported domains with ProblemSpec mappings, AXLE integration requirements, Axioms-Conjecture-Proof pipeline workflow"
+            }
+          ]
+        }
+      },
+      "mcp-toolsmith": {
+        "prompt_sections": {
+          "design_rules": [
+            {
+              "id": "fc-mcp-design",
+              "content_file": "contributions/agents/mcp-toolsmith-rules.md",
+              "inline": false,
+              "summary": "AXLE tool surface design: require explicit environment parameter, separate lean_messages/tool_messages, one tool per Lean operation"
+            }
+          ]
+        }
+      }
+    },
+    "spec": {
+      "context": {
+        "required_sections": [
+          {
+            "id": "fc-spec-context-domain",
+            "section_heading": "Mathematical Domain & Proof Scope",
+            "description": "Identify which supported mathematical domains apply (continuous optimization, non-cooperative game theory, cooperative game theory, discrete). State the theorems to be formalized, required lemmas, expected proof structure, and any composite-domain considerations."
+          },
+          {
+            "id": "fc-spec-context-lean-env",
+            "section_heading": "Lean Environment & Mathlib Dependencies",
+            "description": "State the target Lean version (lean-4.29.0), expected Mathlib theory dependencies, any known Mathlib gaps, and AXLE MCP server requirements (axiom-axle-mcp, AXLE_API_KEY)."
+          }
+        ]
+      },
+      "design": {
+        "required_sections": [
+          {
+            "id": "fc-spec-design-lean-arch",
+            "section_heading": "Lean Architecture",
+            "description": "Define Lean file organization (number of files, import hierarchy), namespace conventions (following Mathlib style), Mathlib import strategy, and placement of shared definitions (spaces, variables, type class instances)."
+          },
+          {
+            "id": "fc-spec-design-sorry",
+            "section_heading": "Sorry Decomposition Strategy",
+            "description": "Define proof obligation granularity (how many sorry sites, one per theorem vs. finer), tactic scope boundaries (which sorry sites are expected to yield to simple vs. complex tactics), known proof dependencies between sorry sites, and the scaffolding-to-proof mapping."
+          }
+        ]
+      }
+    },
+    "delegation": {
+      "advisory_sources": [
+        {
+          "id": "fc-advisory-validate",
+          "name": "FormalConstruct ProblemSpec Validator",
+          "description": "Validates a ProblemSpec JSON file against the schema. Run: formalconstruct validate <path>. Reports validation errors with field paths.",
+          "resolution": "bash-cli"
+        },
+        {
+          "id": "fc-advisory-scaffold",
+          "name": "FormalConstruct Lean Scaffolder",
+          "description": "Generates Lean 4 scaffolding from a validated ProblemSpec. Run: formalconstruct scaffold <spec.json> -o <output.lean>. Produces .lean and .lean.meta.json files.",
+          "resolution": "bash-cli"
+        },
+        {
+          "id": "fc-advisory-schema",
+          "name": "FormalConstruct ProblemSpec Schema",
+          "description": "Prints the ProblemSpec JSON schema for reference during narrative extraction. Run: formalconstruct schema. Output is the full JSON schema.",
+          "resolution": "bash-cli"
+        }
+      ]
+    },
+    "auxiliary_agents": [
+      {
+        "name": "formalize",
+        "role": "End-to-end proof formalization from natural language to verified Lean 4",
+        "pipeline": false,
+        "delegation_policy": "orchestrator_optional",
+        "agent_file": "agents/formalize.md"
+      }
+    ],
+    "mcp_servers": [
+      {
+        "name": "axiom-axle-mcp",
+        "description": "Axiom Lean Engine -- Lean 4 compilation and verification tools (check, verify_proof, repair_proofs, normalize, extract_decls, theorem2sorry, have2lemma). Requires AXLE_API_KEY environment variable.",
+        "config": {
+          "type": "stdio",
+          "command": "uvx",
+          "args": [
+            "--from",
+            "axiom-axle-mcp",
+            "axle-mcp-server"
+          ],
+          "env": {
+            "AXLE_API_KEY": "${AXLE_API_KEY}"
+          }
+        },
+        "required_by": [
+          "fc-executor-safety",
+          "fc-executor-discipline",
+          "fc-executor-verification",
+          "fc-test-workflow"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+[
+  {
+    "id": "lean_workbook_plus_8048",
+    "natural_language_statement": "Finding the greatest value of $\\sqrt{5 - x^2}$ is just like finding the maximum of $5 - x^2$ , and then square rooting that. Taking the derivative, we have $-2x = 0$ so $x = 0$ and the max is $5$ , thus the max of $\\sqrt{5 - x^2}$ is $\\boxed{\\sqrt{5}}$ ."
+  },
+  {
+    "id": "lean_workbook_plus_14472",
+    "natural_language_statement": "Determine the minimum value of $f (x)$ where\\nf (x) = (3 sin x - 4 cos x - 10)(3 sin x + 4 cos x - 10)."
+  },
+  {
+    "id": "lean_workbook_plus_18380",
+    "natural_language_statement": "the maximum value of $a\\sin(x) + b\\cos(x)$ is $1$ when $a^2 + b^2 = 1$"
+  },
+  {
+    "id": "lean_workbook_plus_31913",
+    "natural_language_statement": "In general if you have $a,b>0$ and you want to maximize $y=a\\sin x +b\\cos x$ you can simply use Cauchy-Schwarz: $y^2 \\le (a^2+b^2)(\\sin^2(x)+\\cos^2(x))=a^2+b^2$ and so $y \\le \\sqrt{a^2+b^2}$ where the maximum is attained for $\\tan x=\\frac{\\sin x}{\\cos x}=\\frac{a}{b}$ and so $x=\\arctan \\frac{a}{b}$ with $x \\in [0, \\frac{\\pi}{2})$ ."
+  },
+  {
+    "id": "lean_workbook_plus_32710",
+    "natural_language_statement": "Now, taking logarithms in our inequality $\\displaystyle \\prod_{k=1}^n \\dfrac {1 + x_k} {x_k} \\geq \\prod_{k=1}^n \\dfrac {1 + y_k} {y_k}$ makes it $\\displaystyle \\sum_{k=1}^n \\ln \\dfrac {1 + x_k} {x_k} \\geq \\sum_{k=1}^n \\ln \\dfrac {1 + y_k} {y_k}$ . But the function $f\\colon (0,\\infty) \\to \\mathbb{R}$ given by $f(x) = \\ln \\dfrac {1 + x} {x}$ has first derivative $f'(x) = \\dfrac {1} {x+1} - \\dfrac {1} {x} = -\\dfrac {1} {x(x+1)}$ and second derivative $f''(x) = \\dfrac {2x+1} {x^2(x+1)^2} > 0$ , so $f$ is convex. Since $(x_1,x_2,\\ldots,x_n) \\succeq (y_1,y_2,\\ldots,y_n)$ , by Karamata's inequality we have $\\displaystyle \\sum_{k=1}^n f(x_k) \\geq \\sum_{k=1}^n f(y_k)$ , and all is done and proved."
+  },
+  {
+    "id": "lean_workbook_plus_35207",
+    "natural_language_statement": "So now we minimize $[CMN]+[APB]$ . Let $CN=x$ and the side length of the equilateral be $1$ . So the area we want to minimize is equal to $\\frac{\\sqrt{3}}{4}x^2+\\frac{\\sqrt{3}}{4}(1-x)=\\frac{\\sqrt{3}}{4}(x^2-x+1)=\\frac{\\sqrt{3}}{4}((x-\\frac{1}{2})^2+\\frac{3}{4})$ . The minimum value of this is $\\frac{3\\sqrt{3}}{16}$ ."
+  },
+  {
+    "id": "lean_workbook_plus_46043",
+    "natural_language_statement": "Prove that the maximum value of $a\\sin\\theta+b\\cos\\theta$ is $\\sqrt{a^2+b^2}$"
+  },
+  {
+    "id": "lean_workbook_plus_46535",
+    "natural_language_statement": "Find the minimum value of $\\frac{9x^2sin^2x+4}{xsinx}$ for $0<x<\\pi$"
+  },
+  {
+    "id": "lean_workbook_plus_54232",
+    "natural_language_statement": "Find the maximum and minimum values of the function $\\sin(x+a) \\cos(2x+b)$, where $a$ and $b$ are fixed constants."
+  },
+  {
+    "id": "lean_workbook_plus_61973",
+    "natural_language_statement": "For positive integer $ k$ , let $ f_k(x) = \\frac {1}{k}(\\sin^k x + \\cos^k x)$ Find the minimum possible value of $ f_4(x) - f_6(x)$ ."
+  },
+  {
+    "id": "lean_workbook_plus_62528",
+    "natural_language_statement": "Prove that the sequence $a_n = \\sqrt{3a_{n-1} + 1}$ is strictly increasing and bounded above."
+  },
+  {
+    "id": "lean_workbook_plus_65243",
+    "natural_language_statement": "Determine the minimum value of $f(x)$ where \\nf(x) = (3sin(x) - 4cos(x) - 10)(3sin(x) + 4cos(x) - 10) ."
+  },
+  {
+    "id": "lean_workbook_plus_71897",
+    "natural_language_statement": "Find The minimum of \\n $\\root{3}\\of{4-3x+\\sqrt{16-24x+9x^{2}-x^{3}}}+\\root{3}\\of{4-3x-\\sqrt{16-24x+9x^{2}-x^{3}}}$ \\n with $-1\\leq x\\leq 1$"
+  },
+  {
+    "id": "lean_workbook_plus_81606",
+    "natural_language_statement": "Find the minimum and maximum values of the function $f(x) = (\\sin^2(x) + 1)(2\\cos^2(x) + 1)$."
+  },
+  {
+    "id": "lean_workbook_plus_81713",
+    "natural_language_statement": "Find the maximal value or supremum of the functions $f(x) = \\cos (x + a) + \\cos (\\sqrt{2}x + b), a, b \\in \\mathbb{R} $."
+  },
+  {
+    "id": "lean_workbook_plus_82245",
+    "natural_language_statement": "Find the minimum of the expression: $\\frac{a^2}{\\sqrt{b^2+c^2}}+\\frac{b^2}{\\sqrt{c^2+a^2}}+\\frac{c^2}{\\sqrt{a^2+b^2}}$"
+  }
+]

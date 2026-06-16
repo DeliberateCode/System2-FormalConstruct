@@ -1,0 +1,34 @@
+{
+  "name": "DeliberateCode-System2-FormalConstruct",
+  "owner": {
+    "name": "Deliberate Code"
+  },
+  "metadata": {
+    "description": "System2 overlay for Lean 4 proof formalization (Axioms-Conjecture-Proof pipeline, AXLE MCP integration)"
+  },
+  "plugins": [
+    {
+      "name": "formalconstruct",
+      "version": "0.1.0",
+      "source": "./plugin",
+      "description": "System2 overlay: Lean 4 proof formalization guidance via Axioms-Conjecture-Proof pipeline. Injects proof-domain guidance into executor, code-reviewer, design-architect, and 6 other pipeline agents.",
+      "author": {
+        "name": "Deliberate Code"
+      },
+      "homepage": "https://github.com/DeliberateCode/System2-FormalConstruct",
+      "repository": "https://github.com/DeliberateCode/System2-FormalConstruct",
+      "license": "MIT",
+      "keywords": [
+        "formal-verification",
+        "proof-formalization",
+        "lean4",
+        "theorem-proving",
+        "axle",
+        "system2",
+        "overlay",
+        "mathematics"
+      ],
+      "category": "workflow"
+    }
+  ]
+}

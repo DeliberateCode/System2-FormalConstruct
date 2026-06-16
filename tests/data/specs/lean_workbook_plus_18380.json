@@ -1,0 +1,26 @@
+{
+  "problem_domain": "continuous_optimization",
+  "spaces": [
+    {"name": "RealLine", "base_type": "Real"}
+  ],
+  "variables": [
+    {"symbol": "a", "classification": "exogenous", "space_reference": "RealLine"},
+    {"symbol": "b", "classification": "exogenous", "space_reference": "RealLine"},
+    {"symbol": "x", "classification": "exogenous", "space_reference": "RealLine"}
+  ],
+  "functions": [],
+  "constraints": [
+    {
+      "expression": "a^2 + b^2",
+      "relation": "=",
+      "value": "1",
+      "description": "Unit circle constraint a^2 + b^2 = 1"
+    }
+  ],
+  "objective": {
+    "direction": "inequality",
+    "expression_latex": "a * sin(x) + b * cos(x)",
+    "relation": "<=",
+    "bound": "1"
+  }
+}

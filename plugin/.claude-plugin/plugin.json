@@ -1,0 +1,23 @@
+{
+  "name": "formalconstruct",
+  "description": "System2 overlay: Lean 4 proof formalization guidance via Axioms-Conjecture-Proof pipeline. Injects proof-domain guidance into System2 pipeline agents.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Deliberate Code"
+  },
+  "repository": "https://github.com/DeliberateCode/System2-FormalConstruct",
+  "license": "MIT",
+  "mcpServers": {
+    "axle": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "axiom-axle-mcp",
+        "axle-mcp-server"
+      ],
+      "env": {
+        "AXLE_API_KEY": "${AXLE_API_KEY}"
+      }
+    }
+  }
+}

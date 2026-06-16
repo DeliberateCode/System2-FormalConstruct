@@ -1,0 +1,19 @@
+{
+  "problem_domain": "continuous_optimization",
+  "spaces": [
+    {"name": "RealLine", "base_type": "Real"}
+  ],
+  "variables": [],
+  "indexed_variables": [
+    {"symbol": "a", "index_type": "Nat", "value_type": "Real"}
+  ],
+  "functions": [],
+  "sequence_relations": [
+    {"type": "initial", "left": "a", "index": "0", "value": "1"},
+    {"type": "recurrence", "left": "a", "expression": "sqrt(3*t + 1)", "expr_var": "t", "index_var": "n"}
+  ],
+  "objective": {
+    "direction": "existential_bound",
+    "existential_bound": {"sequence": "a", "bound_var": "M", "relation": "<", "index_var": "n"}
+  }
+}

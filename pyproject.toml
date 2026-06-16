@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "formalconstruct"
+dynamic = ["version"]
+description = "Toolkit for translating mathematical narratives into verified Lean 4 proofs"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Deliberate Code"}]
+requires-python = ">=3.11"
+keywords = ["lean4", "formal-verification", "mathematical-proofs", "mathlib"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "pydantic>=2.0",
+    "jinja2>=3.0",
+]
+
+[project.scripts]
+formalconstruct = "formalconstruct.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/DeliberateCode/System2-FormalConstruct"
+Documentation = "https://github.com/DeliberateCode/System2-FormalConstruct"
+Repository = "https://github.com/DeliberateCode/System2-FormalConstruct"
+"Bug Tracker" = "https://github.com/DeliberateCode/System2-FormalConstruct/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+]
+benchmark = [
+    "datasets",
+    "tqdm",
+]
+
+[tool.hatch.version]
+path = "VERSION"
+pattern = "^(?P<version>[^\n]+)"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "unit: unit tests",
+    "integration: integration tests",
+    "e2e: end-to-end tests",
+    "live: live service tests (require running AXLE server)",
+]

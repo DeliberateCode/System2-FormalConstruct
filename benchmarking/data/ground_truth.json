@@ -1,0 +1,178 @@
+[
+  {
+    "id": "lean_workbook_plus_8048",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Finding the greatest value of $\\sqrt{5 - x^2}$ is just like finding the maximum of $5 - x^2$ , and then square rooting that. Taking the derivative, we have $-2x = 0$ so $x = 0$ and the max is $5$ , thus the max of $\\sqrt{5 - x^2}$ is $\\boxed{\\sqrt{5}}$ .",
+    "formal_statement": "theorem lean_workbook_plus_8048  (x : ℝ)\n  (h₀ : 0 ≤ 5 - x^2) :\n  Real.sqrt (5 - x^2) ≤ Real.sqrt 5   :=  by sorry",
+    "ground_truth_tactic": "apply Real.sqrt_le_sqrt <;> nlinarith [h₀]",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_14472",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Determine the minimum value of $f (x)$ where\\nf (x) = (3 sin x - 4 cos x - 10)(3 sin x + 4 cos x - 10).",
+    "formal_statement": "theorem lean_workbook_plus_14472 (x : ℝ) : (3 * Real.sin x - 4 * Real.cos x - 10) * (3 * Real.sin x + 4 * Real.cos x - 10) ≥ -49   :=  by sorry",
+    "ground_truth_tactic": "nlinarith [sin_sq_add_cos_sq x]",
+    "ground_truth_answer": "minimum_value",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_18380",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "the maximum value of $a\\sin(x) + b\\cos(x)$ is $1$ when $a^2 + b^2 = 1$",
+    "formal_statement": "theorem lean_workbook_plus_18380 (a b : ℝ) (x : ℝ) (h : a^2 + b^2 = 1) :\n  a * Real.sin x + b * Real.cos x ≤ 1   :=  by sorry",
+    "ground_truth_tactic": "have h2 : 0 ≤ (a * cos x - b * sin x) ^ 2 := sq_nonneg _",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "hard",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_31913",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "In general if you have $a,b>0$ and you want to maximize $y=a\\sin x +b\\cos x$ you can simply use Cauchy-Schwarz: $y^2 \\le (a^2+b^2)(\\sin^2(x)+\\cos^2(x))=a^2+b^2$ and so $y \\le \\sqrt{a^2+b^2}$ where the maximum is attained for $\\tan x=\\frac{\\sin x}{\\cos x}=\\frac{a}{b}$ and so $x=\\arctan \\frac{a}{b}$ with $x \\in [0, \\frac{\\pi}{2})$ .",
+    "formal_statement": "theorem lean_workbook_plus_31913  (a b : ℝ)\n  (x : ℝ)\n  (h₀ : 0 < a ∧ 0 < b)\n  (h₁ : 0 ≤ x ∧ x < π / 2) :\n  a * Real.sin x + b * Real.cos x ≤ Real.sqrt (a^2 + b^2)   :=  by sorry",
+    "ground_truth_tactic": "apply Real.le_sqrt_of_sq_le",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_32710",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Now, taking logarithms in our inequality $\\displaystyle \\prod_{k=1}^n \\dfrac {1 + x_k} {x_k} \\geq \\prod_{k=1}^n \\dfrac {1 + y_k} {y_k}$ makes it $\\displaystyle \\sum_{k=1}^n \\ln \\dfrac {1 + x_k} {x_k} \\geq \\sum_{k=1}^n \\ln \\dfrac {1 + y_k} {y_k}$ . But the function $f\\colon (0,\\infty) \\to \\mathbb{R}$ given by $f(x) = \\ln \\dfrac {1 + x} {x}$ has first derivative $f'(x) = \\dfrac {1} {x+1} - \\dfrac {1} {x} = -\\dfrac {1} {x(x+1)}$ and second derivative $f''(x) = \\dfrac {2x+1} {x^2(x+1)^2} > 0$ , so $f$ is convex. Since $(x_1,x_2,\\ldots,x_n) \\succeq (y_1,y_2,\\ldots,y_n)$ , by Karamata's inequality we have $\\displaystyle \\sum_{k=1}^n f(x_k) \\geq \\sum_{k=1}^n f(y_k)$ , and all is done and proved.",
+    "formal_statement": "theorem lean_workbook_plus_32710  (x y : ℕ → ℝ)\n  (n : ℕ)\n  (h₀ : 0 < n)\n  (h₁ : ∀ k, 0 < x k)\n  (h₂ : ∀ k, 0 < y k)\n  (h₃ : ∀ k, x k ≤ y k)\n  : ∑ k in Finset.range n, Real.log ((1 + x k) / x k) ≥ ∑ k in Finset.range n, Real.log ((1 + y k) / y k)   :=  by sorry",
+    "ground_truth_tactic": "refine' Finset.sum_le_sum fun i _ => Real.log_le_log _ _",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_35207",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "So now we minimize $[CMN]+[APB]$ . Let $CN=x$ and the side length of the equilateral be $1$ . So the area we want to minimize is equal to $\\frac{\\sqrt{3}}{4}x^2+\\frac{\\sqrt{3}}{4}(1-x)=\\frac{\\sqrt{3}}{4}(x^2-x+1)=\\frac{\\sqrt{3}}{4}((x-\\frac{1}{2})^2+\\frac{3}{4})$ . The minimum value of this is $\\frac{3\\sqrt{3}}{16}$ .",
+    "formal_statement": "theorem lean_workbook_plus_35207  (x : ℝ)\n  (h₀ : 0 < x)\n  (h₁ : x ≤ 1) :\n  3 * Real.sqrt 3 / 16 ≤ x^2 * Real.sqrt 3 / 4 + (1 - x) * Real.sqrt 3 / 4   :=  by sorry",
+    "ground_truth_tactic": "have h₂ : 0 < 3 * √3 / 16 := by positivity",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "hard",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_46043",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Prove that the maximum value of $a\\sin\\theta+b\\cos\\theta$ is $\\sqrt{a^2+b^2}$",
+    "formal_statement": "theorem lean_workbook_plus_46043 (a b : ℝ) : ∀ θ : ℝ, a * Real.sin θ + b * Real.cos θ ≤ Real.sqrt (a ^ 2 + b ^ 2)   :=  by sorry",
+    "ground_truth_tactic": "refine' fun θ => le_sqrt_of_sq_le _",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_46535",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Find the minimum value of $\\frac{9x^2sin^2x+4}{xsinx}$ for $0<x<\\pi$",
+    "formal_statement": "theorem lean_workbook_plus_46535 (x : ℝ) (hx : 0 < x ∧ x < π) : (9 * (x ^ 2 * (sin x) ^ 2) + 4) / (x * sin x) ≥ 12   :=  by sorry",
+    "ground_truth_tactic": "have h₁ : 0 < x * Real.sin x := mul_pos hx.1 (Real.sin_pos_of_pos_of_lt_pi hx.1 hx.2)",
+    "ground_truth_answer": "12",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "hard",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_54232",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Find the maximum and minimum values of the function $\\sin(x+a) \\cos(2x+b)$, where $a$ and $b$ are fixed constants.",
+    "formal_statement": "theorem lean_workbook_plus_54232 (a b : ℝ) : ∀ x : ℝ, (-1 ≤ sin (x + a) * cos (2 * x + b) ∧ sin (x + a) * cos (2 * x + b) ≤ 1)   :=  by sorry",
+    "ground_truth_tactic": "exact fun x ↦ ⟨by nlinarith [Real.sin_sq_add_cos_sq (x + a), Real.sin_sq_add_cos_sq (2 * x + b)], by nlinarith [Real.sin_sq_add_cos_sq (x + a), Real.sin_sq_add_cos_sq (2 * x + b)]⟩",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "hard",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_61973",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "For positive integer $ k$ , let $ f_k(x) = \\frac {1}{k}(\\sin^k x + \\cos^k x)$ Find the minimum possible value of $ f_4(x) - f_6(x)$ .",
+    "formal_statement": "theorem lean_workbook_plus_61973 (x : ℝ) : 1 / 12 ≤ (1 / 4) * (sin x ^ 4 + cos x ^ 4) - (1 / 6) * (sin x ^ 6 + cos x ^ 6)   :=  by sorry",
+    "ground_truth_tactic": "have h1 : 0 ≤ (sin x ^ 2 - cos x ^ 2) ^ 2 := sq_nonneg _",
+    "ground_truth_answer": "1/12",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "hard",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_62528",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Prove that the sequence $a_n = \\sqrt{3a_{n-1} + 1}$ is strictly increasing and bounded above.",
+    "formal_statement": "theorem lean_workbook_plus_62528 (a : ℕ → ℝ) (ha : a 0 = 1) (hab : ∀ n, a (n + 1) = Real.sqrt (3 * a n + 1)) : ∃ M, ∀ n, a n < M   :=  by sorry",
+    "ground_truth_tactic": "refine' ⟨4, fun n => _⟩",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_65243",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Determine the minimum value of $f(x)$ where \\nf(x) = (3sin(x) - 4cos(x) - 10)(3sin(x) + 4cos(x) - 10) .",
+    "formal_statement": "theorem lean_workbook_plus_65243 (x : ℝ) : (49 : ℝ) ≤ ((3 * Real.sin x - 4 * Real.cos x - 10) * (3 * Real.sin x + 4 * Real.cos x - 10))   :=  by sorry",
+    "ground_truth_tactic": "nlinarith [Real.sin_sq_add_cos_sq x]",
+    "ground_truth_answer": "49",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_71897",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Find The minimum of \\n $\\root{3}\\of{4-3x+\\sqrt{16-24x+9x^{2}-x^{3}}}+\\root{3}\\of{4-3x-\\sqrt{16-24x+9x^{2}-x^{3}}}$ \\n with $-1\\leq x\\leq 1$",
+    "formal_statement": "theorem lean_workbook_plus_71897  (x : ℝ)\n  (h₀ : -1 ≤ x ∧ x ≤ 1) :\n  3 * (4 - 3 * x + Real.sqrt (16 - 24 * x + 9 * x^2 - x^3))^(1/3) + 3 * (4 - 3 * x - Real.sqrt (16 - 24 * x + 9 * x^2 - x^3))^(1/3) ≥ 3 * (-1)   :=  by sorry",
+    "ground_truth_tactic": "norm_num [h₀.1, h₀.2]",
+    "ground_truth_answer": "-1",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_81606",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Find the minimum and maximum values of the function $f(x) = (\\sin^2(x) + 1)(2\\cos^2(x) + 1)$.",
+    "formal_statement": "theorem lean_workbook_plus_81606 (x : ℝ) : 2 ≤ (sin x ^ 2 + 1) * (2 * cos x ^ 2 + 1) ∧ (sin x ^ 2 + 1) * (2 * cos x ^ 2 + 1) ≤ 4   :=  by sorry",
+    "ground_truth_tactic": "refine' ⟨by nlinarith [sin_sq_add_cos_sq x], by nlinarith [sin_sq_add_cos_sq x]⟩",
+    "ground_truth_answer": "Minimum: 2, Maximum: 4",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_81713",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Find the maximal value or supremum of the functions $f(x) = \\cos (x + a) + \\cos (\\sqrt{2}x + b), a, b \\in \\mathbb{R} $.",
+    "formal_statement": "theorem lean_workbook_plus_81713 (a b : ℝ) : ∀ x : ℝ, cos (x + a) + cos (Real.sqrt 2 * x + b) ≤ 2   :=  by sorry",
+    "ground_truth_tactic": "exact fun x ↦ by linarith [cos_le_one (x + a), cos_le_one (Real.sqrt 2 * x + b)]",
+    "ground_truth_answer": "2",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  },
+  {
+    "id": "lean_workbook_plus_82245",
+    "source": "internlm/Lean-Workbook",
+    "natural_language_statement": "Find the minimum of the expression: $\\frac{a^2}{\\sqrt{b^2+c^2}}+\\frac{b^2}{\\sqrt{c^2+a^2}}+\\frac{c^2}{\\sqrt{a^2+b^2}}$",
+    "formal_statement": "theorem lean_workbook_plus_82245 (a b c : ℝ) : (a^2 / Real.sqrt (b^2 + c^2) + b^2 / Real.sqrt (c^2 + a^2) + c^2 / Real.sqrt (a^2 + b^2)) ≥ 0   :=  by sorry",
+    "ground_truth_tactic": "apply_rules [add_nonneg, div_nonneg, sq_nonneg, Real.sqrt_nonneg]",
+    "ground_truth_answer": "",
+    "domain_tag": "continuous_optimization",
+    "difficulty_estimate": "medium",
+    "sorry_count": 1
+  }
+]

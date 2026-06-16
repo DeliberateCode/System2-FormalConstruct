@@ -1,0 +1,42 @@
+[
+  {
+    "id": "lean_workbook_plus_1003",
+    "natural_language_statement": "SolutionIdeally, $abc-def=1$ . Guessing and checking without using $9$ or $8$ in the numerator gives $\\\\frac{6\\cdot3\\cdot2-7\\cdot5\\cdot1}{9\\cdot8\\cdot4}$ . Since $abc-def=1$ , then one of $\\{a,b,c\\}$ or $\\{d,e,f\\}$ must contain only odd factors, and trying the $1,3,5$ case means one of them must be $7$ or $9$ . As well, it's impossible to get $\\\\frac{1}{9\\cdot8\\cdot6}$ by checking all of the cases, leaving $\\\\frac{6\\cdot3\\cdot2-7\\cdot5\\cdot1}{9\\cdot8\\cdot4}=\\frac{1}{288}$ as the minimum positive fraction achievable, for an answer of $\\boxed{289}$ ."
+  },
+  {
+    "id": "lean_workbook_plus_1188",
+    "natural_language_statement": "Maximize $ U=x^{1/3}y^{2/3}$ subject to $ 6x+3y=18$"
+  },
+  {
+    "id": "lean_workbook_plus_1423",
+    "natural_language_statement": "Find the maximum possible value of $a + b + c ,$ if $a,b,c$ are positive real numbers such that $a^2 + b^2 + c^2 = a^3 + b^3 + c^3$."
+  },
+  {
+    "id": "lean_workbook_plus_1665",
+    "natural_language_statement": "Find the maximum value of $ac+bc-c^{2}-ab$ given $a-b=4$ where $a, b, c$ are real numbers."
+  },
+  {
+    "id": "lean_workbook_plus_2804",
+    "natural_language_statement": "Case 2. $x \\ge 2$ . We now cannot set $y=x$ , as $z=3-2x \\le -1$ . We need to set $y=4-x$ and $z=-1$ to get $y$ as large as possible. This gives $x^2+y^2+z^2=x^2+(4-x)^2+1 = 2x^2-8x+17$ , which has maximum at $x=3$ , ( $2 \\le x \\le 3$ ) so $x^2+y^2+z^2 \\le 11$ in this case."
+  },
+  {
+    "id": "lean_workbook_plus_4325",
+    "natural_language_statement": "Let $x, y \\in \\mathbb{R}$ and $| 2x-y |\\le 3$ and $| x-3y | \\le 1$ . Find maximum value of $P=x^2+xy+y^2$ ."
+  },
+  {
+    "id": "lean_workbook_plus_5309",
+    "natural_language_statement": "Find the maximum value of $xy$ given $x+y=10$."
+  },
+  {
+    "id": "lean_workbook_plus_5936",
+    "natural_language_statement": "Given $ x,y > 0$ , find the minimum value of this expression: \\n\\n $ \\frac{1}{x^2+y^2}+\\frac{x^2}{1+x^2}+\\frac{y^2}{1+y^2}$"
+  },
+  {
+    "id": "lean_workbook_plus_6627",
+    "natural_language_statement": "If they're arranged in a $2\\times2$ grid, then we maximize $xy$ given $3x+3y=120$ , or $x+y=40$ . At $x=y=20$ , this gives us $\\boxed{400}$"
+  },
+  {
+    "id": "lean_workbook_plus_8048",
+    "natural_language_statement": "Finding the greatest value of $\\sqrt{5 - x^2}$ is just like finding the maximum of $5 - x^2$ , and then square rooting that. Taking the derivative, we have $-2x = 0$ so $x = 0$ and the max is $5$ , thus the max of $\\sqrt{5 - x^2}$ is $\\boxed{\\sqrt{5}}$ ."
+  }
+]

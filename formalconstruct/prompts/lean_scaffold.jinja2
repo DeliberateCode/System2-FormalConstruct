@@ -1,0 +1,26 @@
+{{ import_block }}
+
+{% if dimension_variable %}
+variable (n : ℕ)
+
+{% endif %}
+{% if space_block is not none %}
+{{ space_block }}
+
+{% endif %}
+{% if variable_block is not none %}
+{{ variable_block }}
+
+{% endif %}
+{% if preamble_block is not none %}
+{{ preamble_block }}
+
+
+{% endif %}
+{% if function_block is not none %}
+{{ function_block }}
+
+{% endif %}
+{% if theorem_block is not none %}
+{{ theorem_block }}
+{% endif %}
