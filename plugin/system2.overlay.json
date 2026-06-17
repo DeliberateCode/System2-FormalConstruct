@@ -206,7 +206,7 @@
           {
             "id": "fc-spec-context-domain",
             "section_heading": "Mathematical Domain & Proof Scope",
-            "description": "Identify which supported mathematical domains apply (continuous optimization, non-cooperative game theory, cooperative game theory, discrete). State the theorems to be formalized, required lemmas, expected proof structure, and any composite-domain considerations."
+            "description": "Identify which supported mathematical domains apply (continuous optimization, non-cooperative game theory, cooperative game theory). State the theorems to be formalized, required lemmas, expected proof structure, and any composite-domain considerations."
           },
           {
             "id": "fc-spec-context-lean-env",
@@ -270,7 +270,7 @@
           "command": "uvx",
           "args": [
             "--from",
-            "axiom-axle-mcp",
+            "axiom-axle-mcp==0.3.5",
             "axle-mcp-server"
           ],
           "env": {

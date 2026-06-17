@@ -6,8 +6,8 @@ Use the AXLE `verify_proof` tool as the primary verification for Lean output:
 
 - Call `verify_proof` with the complete Lean source and `environment: "lean-4.29.0"`
 - `verify_proof` rejects any source containing `sorry` -- this is the strictest available check
-- A result of `verified: true` confirms the proof is complete and kernel-verified
-- A result of `verified: false` means the proof has unresolved obligations or verification errors
+- A result of `okay: true` confirms the proof is complete and kernel-verified
+- A result of `okay: false` means the proof has unresolved obligations or verification errors
 
 ### Compilation Before Verification
 

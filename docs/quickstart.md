@@ -18,7 +18,7 @@ Add the following to your Claude Code MCP configuration:
     "axiom-axle-mcp": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "axiom-axle-mcp", "axle-mcp-server"]
+      "args": ["--from", "axiom-axle-mcp==0.3.5", "axle-mcp-server"]
     }
   }
 }

@@ -38,6 +38,31 @@ def _lean_type_for_space(space: Space) -> str:
     return type_map.get(space.base_type, "ℝ")
 
 
+def _tuple_projections(name: str, n: int) -> list[str]:
+    """Build Lean 4 right-associated tuple projection accessors for *name*.
+
+    Lean 4 tuples are right-nested: ``(a, b, c) : A × (B × C)``, so the
+    projections are ``.1 = a``, ``.2.1 = b``, ``.2.2 = c``.
+
+    For n=1: ``[name]``
+    For n=2: ``[name.1, name.2]``
+    For n=3: ``[name.1, name.2.1, name.2.2]``
+
+    Shared by ContinuousOptMapper and GameTheoryMapper.
+    """
+    if n == 1:
+        return [name]
+    if n == 2:
+        return [f"{name}.1", f"{name}.2"]
+    result = [f"{name}.1"]
+    suffix = f"{name}.2"
+    for _ in range(n - 2):
+        result.append(f"{suffix}.1")
+        suffix = f"{suffix}.2"
+    result.append(suffix)
+    return result
+
+
 def property_hypothesis(symbol: str, domain_set: str, prop: FunctionProperty) -> str:
     """Shared mapping from FunctionProperty to Mathlib type class hypothesis."""
     mapping = {

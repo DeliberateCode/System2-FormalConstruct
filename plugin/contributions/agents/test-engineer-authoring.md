@@ -6,7 +6,7 @@ Maintain a set of known-good narrative-to-proof pairs that serve as regression a
 
 - Each golden entry includes: narrative text, ProblemSpec JSON, scaffolded Lean (with sorry), and verified Lean (sorry-free)
 - When scaffolding logic or domain mappers change, re-verify all golden corpus entries
-- Golden entries cover each supported domain: continuous optimization, non-cooperative game theory, cooperative game theory, and discrete domains
+- Golden entries cover each supported domain: continuous optimization, non-cooperative game theory, and cooperative game theory
 - Add a new golden entry whenever a novel proof pattern is successfully verified
 
 ### Compilation-Check Tests

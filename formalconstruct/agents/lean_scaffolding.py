@@ -171,14 +171,21 @@ class LeanScaffoldingAgent:
             # the function block) so they may reference declared functions
             # without producing a use-before-declaration in the Lean output.
             relation_hyp_lines: list[str] = []
+            relation_hyp_attrs: list[tuple[str, int, int]] = []
             for i, c in enumerate(problem_spec.constraints):
                 hyp = mapper.map_constraint(c, i)
                 if hyp:
-                    relation_hyp_lines.extend(hyp.split("\n"))
+                    start, end = _find_narrative_span(c.description or c.expression)
+                    for sub in hyp.split("\n"):
+                        relation_hyp_lines.append(sub)
+                        relation_hyp_attrs.append((f"constraints[{i}]", start, end))
             for i, sr in enumerate(problem_spec.sequence_relations):
                 hyp = mapper.map_sequence_relation(sr, i)
                 if hyp:
-                    relation_hyp_lines.extend(hyp.split("\n"))
+                    start, end = _find_narrative_span(sr.left)
+                    for sub in hyp.split("\n"):
+                        relation_hyp_lines.append(sub)
+                        relation_hyp_attrs.append((f"sequence_relations[{i}]", start, end))
 
             # ── Objective → preamble + theorem ────────────────────
             theorem_str = mapper.map_objective(
@@ -310,6 +317,7 @@ class LeanScaffoldingAgent:
             # inequality/existential goals reference data variables but not their
             # hypotheses, so a Lean `include` binds them explicitly.
             prefix: list[str] = list(relation_hyp_lines)
+            prefix_attrs: list[tuple[str, int, int]] = list(relation_hyp_attrs)
             if problem_spec.objective.direction in (
                 ObjectiveDirection.INEQUALITY,
                 ObjectiveDirection.EXISTENTIAL_BOUND,
@@ -319,10 +327,11 @@ class LeanScaffoldingAgent:
                 hyp_names += _collect_hypothesis_names(function_lines)
                 if hyp_names:
                     prefix.append("include " + " ".join(hyp_names))
+                    prefix_attrs.append(("objective.hypotheses", -1, -1))
             if prefix and theorem_block_lines:
                 n = len(prefix)
                 theorem_block_attrs = (
-                    [(i, "objective.hypotheses", -1, -1) for i in range(n)]
+                    [(i, sf, ns, ne) for i, (sf, ns, ne) in enumerate(prefix_attrs)]
                     + [(idx + n, sf, ns, ne) for (idx, sf, ns, ne) in theorem_block_attrs]
                 )
                 theorem_block_lines = prefix + theorem_block_lines
@@ -451,9 +460,10 @@ def _find_theorem_name(content: str, sorry_line: int) -> str:
     lines = content.split("\n")
     for i in range(sorry_line - 1, -1, -1):
         line = lines[i] if i < len(lines) else ""
+        stripped = line.lstrip()
         for keyword in ("theorem ", "lemma ", "def "):
-            if keyword in line:
-                rest = line.split(keyword, 1)[1].strip()
+            if stripped.startswith(keyword):
+                rest = stripped.split(keyword, 1)[1].strip()
                 name = rest.split()[0].split("(")[0].rstrip(":") if rest.split() else "unknown"
                 return name
     return "unknown"

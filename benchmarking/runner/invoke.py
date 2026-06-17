@@ -63,6 +63,15 @@ def _scrubbed_env() -> dict[str, str]:
     return {k: v for k, v in os.environ.items() if k not in _DENIED_ENV_KEYS}
 
 
+def _is_within_allowed_roots(path: Path, roots: list[Path]) -> bool:
+    """True if *path* resolves inside one of *roots* (no traversal escape)."""
+    try:
+        resolved = path.resolve()
+    except (OSError, RuntimeError):
+        return False
+    return any(resolved.is_relative_to(root.resolve()) for root in roots)
+
+
 def _collect_outputs(workdir: Path, transcript: str) -> tuple[str | None, dict | None, list[str]]:
     """Collect outputs from workdir and agent transcript.
 
@@ -89,27 +98,37 @@ def _collect_outputs(workdir: Path, transcript: str) -> tuple[str | None, dict |
             except json.JSONDecodeError:
                 pass
 
-    # If no lean source in workdir, try extracting from the transcript
+    # If no lean source in workdir, try extracting from the transcript. Reads
+    # are sandboxed to the run workdir and the system temp dir (where the agent
+    # legitimately writes) so a regex-harvested path can't read arbitrary files.
+    allowed_roots = [workdir, Path(tempfile.gettempdir())]
     if lean_source is None and transcript:
-        lean_source, file_path = _extract_lean_from_transcript(transcript)
+        lean_source, file_path = _extract_lean_from_transcript(transcript, allowed_roots)
         if file_path:
             files.append(file_path)
             # Also try reading the file if it still exists on disk
             p = Path(file_path)
-            if p.exists() and p.suffix == ".lean":
+            if (
+                p.suffix == ".lean"
+                and _is_within_allowed_roots(p, allowed_roots)
+                and p.is_file()
+            ):
                 lean_source = p.read_text()
 
     return lean_source, problem_spec, files
 
 
-def _extract_lean_from_transcript(transcript: str) -> tuple[str | None, str | None]:
+def _extract_lean_from_transcript(
+    transcript: str, allowed_roots: list[Path]
+) -> tuple[str | None, str | None]:
     """Extract lean source code from the agent's JSON result output.
 
     Prefers an on-disk ``.lean`` file the agent mentions (that's the artifact it
     actually verified) over a fenced code block. Agents often write the proof to
-    a path outside the run workdir (e.g. ``/tmp/foo.lean``) and only describe it
-    in prose, so we accept any mentioned ``.lean`` path, not just a ``**File**:``
-    line.
+    a path under the system temp dir (e.g. ``/tmp/foo.lean``) and only describe
+    it in prose, so we accept any mentioned ``.lean`` path that resolves inside
+    *allowed_roots* (the run workdir and the system temp dir); paths outside
+    those roots are ignored rather than read.
     """
     import re
 
@@ -138,7 +157,7 @@ def _extract_lean_from_transcript(transcript: str) -> tuple[str | None, str | No
             continue
         seen.add(cand)
         p = Path(cand)
-        if p.is_file():
+        if _is_within_allowed_roots(p, allowed_roots) and p.is_file():
             return p.read_text(), cand
 
     # Otherwise, fall back to the longest fenced ```lean block.

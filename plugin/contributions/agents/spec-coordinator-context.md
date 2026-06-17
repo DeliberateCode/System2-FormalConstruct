@@ -9,7 +9,6 @@ Identify which supported mathematical domains apply to the problem:
 - Continuous optimization (convex/strictly convex cost functions, real-valued domains)
 - Non-cooperative game theory (Nash equilibria, per-player strategy spaces)
 - Cooperative game theory (Pareto optimality, domination predicates)
-- Discrete domains (Int, Nat, Bool base types)
 
 If the problem spans multiple domains, note the composite nature and identify the primary domain for ProblemSpec extraction.
 

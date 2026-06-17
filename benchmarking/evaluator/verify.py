@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
-import json
 import os
 from dataclasses import dataclass
 
@@ -90,47 +88,19 @@ async def verify_with_axle(
 async def _call_axle_verify(content: str, formal_statement: str) -> dict:
     """Call AXLE verify_proof via the MCP server.
 
-    Uses the formalconstruct MCP client infrastructure if available,
-    otherwise falls back to direct HTTP call.
+    Routes through the formalconstruct MCP client, which reads ``AXLE_API_KEY``
+    from the environment and passes it to the subprocess via its env (never on a
+    command line, and never to an unvalidated host). There is no HTTP fallback:
+    if the client is unavailable, that is a hard configuration error rather than
+    a reason to leak the key onto a ``curl`` argv.
     """
-    try:
-        from formalconstruct.mcp_client.connection import AxleMcpConnection
-        from formalconstruct.mcp_client.tools import AxleToolClient
-    except ImportError:
-        pass
-    else:
-        async with AxleMcpConnection() as conn:
-            result = await AxleToolClient(conn).verify_proof(content, formal_statement)
-        return {
-            "okay": result.verified,
-            "compiles": not result.has_errors,
-            "error": "; ".join(result.lean_messages.errors + result.tool_messages.errors),
-        }
+    from formalconstruct.mcp_client.connection import AxleMcpConnection
+    from formalconstruct.mcp_client.tools import AxleToolClient
 
-    # Fallback: shell out to a minimal AXLE call
-    payload = json.dumps({
-        "content": content,
-        "formal_statement": formal_statement,
-        "environment": "lean-4.29.0",
-    })
-
-    proc = await asyncio.create_subprocess_exec(
-        "curl", "-s", "-X", "POST",
-        "-H", "Content-Type: application/json",
-        "-H", f"Authorization: Bearer {os.environ['AXLE_API_KEY']}",
-        "-d", payload,
-        f"{os.environ.get('AXLE_BASE_URL', 'https://api.axle.dev')}/v1/verify_proof",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    stdout, _ = await proc.communicate()
-
-    try:
-        resp = json.loads(stdout.decode())
-        return {
-            "okay": resp.get("okay", False),
-            "compiles": "error" not in resp,
-            "error": resp.get("error", ""),
-        }
-    except json.JSONDecodeError:
-        return {"okay": False, "compiles": False, "error": "Invalid AXLE response"}
+    async with AxleMcpConnection() as conn:
+        result = await AxleToolClient(conn).verify_proof(content, formal_statement)
+    return {
+        "okay": result.verified,
+        "compiles": not result.has_errors,
+        "error": "; ".join(result.lean_messages.errors + result.tool_messages.errors),
+    }

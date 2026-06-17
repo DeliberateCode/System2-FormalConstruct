@@ -20,6 +20,12 @@ class AxleConfig:
     backoff_multiplier: float = 2.0
     max_delay_s: float = 10.0
 
+    # ``uvx --from`` spec for the AXLE MCP server. Pinned to an exact version so
+    # an unpinned uvx fetch can't pull a typosquatted or compromised release that
+    # would receive the API key. Bump deliberately when adopting a new release.
+    axle_mcp_package: str = "axiom-axle-mcp==0.3.5"
+    axle_mcp_server: str = "axle-mcp-server"
+
 
 @dataclass
 class RepairBudget:

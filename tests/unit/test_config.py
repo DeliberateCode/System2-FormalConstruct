@@ -82,7 +82,7 @@ def test_all_classes_are_dataclasses():
 def test_axle_config_field_count():
     from formalconstruct.core.config import AxleConfig
 
-    assert len(fields(AxleConfig)) == 6
+    assert len(fields(AxleConfig)) == 8
 
 
 def test_repair_budget_field_count():

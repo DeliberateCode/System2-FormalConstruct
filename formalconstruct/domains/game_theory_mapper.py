@@ -4,6 +4,7 @@ from formalconstruct.core.exceptions import ScaffoldingError
 from formalconstruct.domains.registry import (
     DomainMapper,
     _lean_type_for_space,
+    _tuple_projections,
     property_hypothesis,
 )
 from formalconstruct.schemas.problem_spec import (
@@ -18,25 +19,6 @@ from formalconstruct.schemas.problem_spec import (
 
 
 _BASE_IMPORTS = ["import Mathlib"]
-
-
-def _tuple_projections(name: str, n: int) -> list[str]:
-    """Build Lean 4 right-associated tuple projections for *name*.
-
-    Lean 4 tuples are right-nested: (a, b, c) : A × (B × C).
-    Projections: .1 = a, .2.1 = b, .2.2 = c.
-    """
-    if n == 1:
-        return [name]
-    if n == 2:
-        return [f"{name}.1", f"{name}.2"]
-    result = [f"{name}.1"]
-    suffix = f"{name}.2"
-    for _ in range(n - 2):
-        result.append(f"{suffix}.1")
-        suffix = f"{suffix}.2"
-    result.append(suffix)
-    return result
 
 
 def _build_deviated_profile(
@@ -79,6 +61,7 @@ class GameTheoryMapper(DomainMapper):
         self._player_count = spec.player_count
         self._strategy_spaces = spec.strategy_spaces
         self._emitted_n_variable = False
+        self._emitted_dim_variable = False
 
     def clear_context(self) -> None:
         """Reset cached state to prevent leaking between calls."""

@@ -107,7 +107,7 @@ class TestStart:
 
         mock_exec.assert_called_once()
         args = mock_exec.call_args
-        assert args[0] == ("uvx", "--from", "axiom-axle-mcp", "axle-mcp-server")
+        assert args[0] == ("uvx", "--from", "axiom-axle-mcp==0.3.5", "axle-mcp-server")
         assert args[1]["env"]["AXLE_API_KEY"] == "test-key"
 
     @pytest.mark.asyncio

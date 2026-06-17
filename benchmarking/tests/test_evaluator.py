@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from benchmarking.evaluator.classify import Outcome, classify
 from benchmarking.evaluator.verify import VerificationResult, check_sorry_free
@@ -186,22 +187,34 @@ class TestExtractLeanFromTranscript:
         f = tmp_path / "proof.lean"
         f.write_text("theorem t : True := trivial\n")
         transcript = json.dumps({"result": f"The verified Lean source is at `{f}`."})
-        src, _ = _extract_lean_from_transcript(transcript)
+        src, _ = _extract_lean_from_transcript(transcript, [tmp_path])
         assert src == "theorem t : True := trivial\n"
 
     def test_reads_bare_path(self, tmp_path):
         f = tmp_path / "p2.lean"
         f.write_text("theorem u : True := trivial\n")
         transcript = json.dumps({"result": f"Wrote {f} and verified it."})
-        src, _ = _extract_lean_from_transcript(transcript)
+        src, _ = _extract_lean_from_transcript(transcript, [tmp_path])
         assert src == "theorem u : True := trivial\n"
 
     def test_fenced_block_fallback(self):
         transcript = json.dumps({"result": "Proof:\n```lean\ntheorem v : True := trivial\n```"})
-        src, _ = _extract_lean_from_transcript(transcript)
+        src, _ = _extract_lean_from_transcript(transcript, [])
         assert "theorem v" in src
 
     def test_missing_path_and_no_block_returns_none(self):
         transcript = json.dumps({"result": "Wrote /tmp/does_not_exist_98765.lean (now gone)."})
-        src, _ = _extract_lean_from_transcript(transcript)
+        src, _ = _extract_lean_from_transcript(transcript, [Path("/tmp")])
+        assert src is None
+
+    def test_path_outside_allowed_roots_is_not_read(self, tmp_path):
+        """Sandbox guard: a .lean path outside the allowed roots is ignored."""
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        f = outside / "secret.lean"
+        f.write_text("theorem leaked : True := trivial\n")
+        allowed = tmp_path / "allowed"
+        allowed.mkdir()
+        transcript = json.dumps({"result": f"See `{f}`."})
+        src, _ = _extract_lean_from_transcript(transcript, [allowed])
         assert src is None

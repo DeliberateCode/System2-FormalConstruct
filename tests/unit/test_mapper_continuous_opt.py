@@ -6,12 +6,12 @@ from pydantic import ValidationError
 from formalconstruct.core.exceptions import ScaffoldingError
 from formalconstruct.domains.continuous_opt_mapper import (
     ContinuousOptMapper,
-    _build_projections,
     _check_expression_convexity_safe,
     _derive_theorem_predicate,
     _expression_to_lean_body,
     _lean_type_for_space,
 )
+from formalconstruct.domains.registry import _tuple_projections
 from formalconstruct.schemas.problem_spec import (
     BaseType,
     Function,
@@ -1038,19 +1038,19 @@ class TestDomainInfoTargetCorrelation:
 class TestProjectionBuilder:
 
     def test_single_variable(self):
-        assert _build_projections(1) == ["p"]
+        assert _tuple_projections("p", 1) == ["p"]
 
     def test_two_variables(self):
-        assert _build_projections(2) == ["p.1", "p.2"]
+        assert _tuple_projections("p", 2) == ["p.1", "p.2"]
 
     def test_three_variables(self):
-        assert _build_projections(3) == ["p.1", "p.2.1", "p.2.2"]
+        assert _tuple_projections("p", 3) == ["p.1", "p.2.1", "p.2.2"]
 
     def test_four_variables(self):
-        assert _build_projections(4) == ["p.1", "p.2.1", "p.2.2.1", "p.2.2.2"]
+        assert _tuple_projections("p", 4) == ["p.1", "p.2.1", "p.2.2.1", "p.2.2.2"]
 
     def test_five_variables(self):
-        assert _build_projections(5) == ["p.1", "p.2.1", "p.2.2.1", "p.2.2.2.1", "p.2.2.2.2"]
+        assert _tuple_projections("p", 5) == ["p.1", "p.2.1", "p.2.2.1", "p.2.2.2.1", "p.2.2.2.2"]
 
 
 class TestMultiVariableBinding:
@@ -1673,7 +1673,55 @@ class TestProductDomainConvexityLemma:
         mapper.set_context(spec)
         result = mapper.map_objective(spec.objective, spec)
         assert "lemma convex_domain : Convex ℝ Domain :=" in result
-        assert "Convex.prod convex_a convex_b" in result
+        # Lemma names preserve the exact (case-sensitive) space name.
+        assert "Convex.prod convex_A convex_B" in result
+
+    def test_case_distinct_spaces_do_not_collide(self):
+        """Spaces differing only by case must yield distinct convexity lemmas.
+
+        Regression guard: lowercasing the lemma name folded ``A`` and ``a`` to a
+        single ``convex_a`` so the second lemma was swallowed by the dedup set and
+        ``convex_domain`` referenced one space's proof term twice.
+        """
+        mapper = ContinuousOptMapper()
+        spec = ProblemSpec(
+            problem_domain=ProblemDomain.CONTINUOUS_OPTIMIZATION,
+            spaces=[
+                Space(name="A", base_type=BaseType.REAL),
+                Space(name="a", base_type=BaseType.REAL),
+            ],
+            variables=[
+                Variable(
+                    symbol="x",
+                    classification=VariableClassification.ENDOGENOUS,
+                    space_reference="A",
+                    bounds=VariableBounds(lower_bound="0", strict_inequality=False),
+                ),
+                Variable(
+                    symbol="y",
+                    classification=VariableClassification.ENDOGENOUS,
+                    space_reference="a",
+                    bounds=VariableBounds(lower_bound="1", upper_bound="5",
+                                         strict_inequality=False),
+                ),
+            ],
+            functions=[
+                Function(symbol="f", domain=["A"], codomain="Real",
+                         properties=[FunctionProperty.CONVEX]),
+                Function(symbol="g", domain=["a"], codomain="Real",
+                         properties=[FunctionProperty.CONVEX]),
+            ],
+            objective=Objective(
+                direction=ObjectiveDirection.MINIMIZE,
+                expression_latex="f(x) + g(y)",
+                target_variable="x",
+            ),
+        )
+        mapper.set_context(spec)
+        result = mapper.map_objective(spec.objective, spec)
+        assert "lemma convex_A : Convex ℝ A :=" in result
+        assert "lemma convex_a : Convex ℝ a :=" in result
+        assert "Convex.prod convex_A convex_a" in result
 
     def test_three_variable_product_convexity_sorry(self):
         """n>2 multi-variable should emit product convexity lemma with sorry."""

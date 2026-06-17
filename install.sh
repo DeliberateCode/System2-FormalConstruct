@@ -22,7 +22,9 @@ for candidate in python3 python; do
         version=$("$candidate" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
         major="${version%%.*}"
         minor="${version#*.}"
-        if [[ "$major" -ge 3 && "$minor" -ge 11 ]]; then
+        # Numeric comparison: accept any major > 3, or 3.11+. Avoids both
+        # lexical pitfalls and wrongly rejecting a future 4.x with a low minor.
+        if [[ "$major" -gt 3 || ( "$major" -eq 3 && "$minor" -ge 11 ) ]]; then
             PYTHON="$candidate"
             break
         fi
@@ -94,7 +96,9 @@ fi
 echo ""
 echo "── Registering AXLE MCP server ──"
 
-AXLE_ADD_CMD=(claude mcp add axle --scope user -- uvx --from axiom-axle-mcp axle-mcp-server)
+# Supply-chain note: `axiom-axle-mcp` receives AXLE_API_KEY, so it is pinned to an
+# exact version. Bump deliberately when adopting a new release.
+AXLE_ADD_CMD=(claude mcp add axle --scope user -- uvx --from 'axiom-axle-mcp==0.3.5' axle-mcp-server)
 if command -v claude &>/dev/null; then
     if claude mcp get axle &>/dev/null; then
         echo "AXLE MCP server already registered (user scope)."

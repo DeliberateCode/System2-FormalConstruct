@@ -16,6 +16,7 @@ from formalconstruct.core.expression_parser import (
 from formalconstruct.domains.registry import (
     DomainMapper,
     _lean_type_for_space,
+    _tuple_projections,
     property_hypothesis,
 )
 from formalconstruct.schemas.problem_spec import (
@@ -325,30 +326,6 @@ def _collect_func_names_from_ast(node: ExprNode) -> set[str]:
     return result
 
 
-def _build_projections(n: int) -> list[str]:
-    """Build Lean tuple projection accessors for n variables.
-
-    For n=1: ["p"]
-    For n=2: ["p.1", "p.2"]
-    For n=3: ["p.1", "p.2.1", "p.2.2"]
-    For n=4: ["p.1", "p.2.1", "p.2.2.1", "p.2.2.2"]
-
-    Follows Lean's right-associated tuple nesting:
-    (a, b, c) : A x (B x C), so p.1=a, p.2.1=b, p.2.2=c
-    """
-    if n == 1:
-        return ["p"]
-    if n == 2:
-        return ["p.1", "p.2"]
-    result = ["p.1"]
-    suffix = "p.2"
-    for i in range(1, n - 1):
-        result.append(f"{suffix}.1")
-        suffix = f"{suffix}.2"
-    result.append(suffix)
-    return result
-
-
 def _rewrite_ast_projections(
     node: ExprNode,
     var_to_proj: dict[str, str],
@@ -519,7 +496,7 @@ class ContinuousOptMapper(DomainMapper):
                     endogenous_vars.sort(key=lambda v: var_order.get(v.symbol, 0))
 
                     # Multi-variable: rewrite AST with tuple projections
-                    projections = _build_projections(len(endogenous_vars))
+                    projections = _tuple_projections("p", len(endogenous_vars))
                     var_to_proj = {
                         v.symbol: proj
                         for v, proj in zip(endogenous_vars, projections)
@@ -609,7 +586,7 @@ class ContinuousOptMapper(DomainMapper):
             convex_lemma_names: list[str] = []
             for i_var, v in enumerate(target_vars):
                 dn = domain_names[i_var]
-                lemma_name = f"convex_{dn.lower()}"
+                lemma_name = f"convex_{dn}"
                 convex_lemma_names.append(lemma_name)
                 if lemma_name not in emitted_lemmas:
                     emitted_lemmas.add(lemma_name)
@@ -671,7 +648,7 @@ class ContinuousOptMapper(DomainMapper):
                 "convex_univ",
             )
             arg = domain_expr.split(" ", 1)[1] if " " in domain_expr else ""
-            lines.append(f"lemma convex_{domain_set.lower()} : Convex ℝ {domain_set} :=")
+            lines.append(f"lemma convex_{domain_set} : Convex ℝ {domain_set} :=")
             lines.append(f"  {convex_lemma} {arg}".rstrip())
             lines.append("")
 

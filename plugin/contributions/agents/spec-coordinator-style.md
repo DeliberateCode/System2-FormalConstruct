@@ -4,7 +4,7 @@
 
 Organize problem descriptions around ProblemSpec fields:
 
-- **`problem_domain`**: State the domain classification explicitly (continuous_optimization, non_cooperative_game, cooperative_game, or discrete)
+- **`problem_domain`**: State the domain classification explicitly (continuous_optimization, non_cooperative_game, or cooperative_game)
 - **`spaces`**: Describe base types and topological properties
 - **`variables`**: State classification (endogenous, exogenous, strategy_profile), bounds (lower/upper, strict/non-strict), and space membership
 - **`functions`**: State properties (convex, strictly convex, linear, continuous) and domain/codomain

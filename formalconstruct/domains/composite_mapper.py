@@ -5,8 +5,11 @@ from formalconstruct.domains.registry import DomainMapper
 from formalconstruct.schemas.problem_spec import (
     Function,
     FunctionProperty,
+    IndexedVariable,
     Objective,
+    ParametricConstraint,
     ProblemSpec,
+    SequenceRelation,
     Space,
     Variable,
 )
@@ -102,3 +105,24 @@ class CompositeDomainMapper(DomainMapper):
 
     def map_bounds(self, var: Variable) -> str:
         return self._mapper_for_variable(var).map_bounds(var)
+
+    def _extension_mapper(self) -> DomainMapper:
+        """Mapper that owns schema-extension hypotheses (constraints, sequence
+        relations, indexed variables).
+
+        These live in ``continuous_optimization``; prefer that child when
+        present so a constraint the objective depends on is never silently
+        dropped. Fall back to the primary mapper otherwise — still explicit
+        delegation rather than the base no-op."""
+        if "continuous_optimization" in self._children:
+            return self._children["continuous_optimization"]
+        return self._primary_mapper()
+
+    def map_indexed_variable(self, iv: IndexedVariable) -> str:
+        return self._extension_mapper().map_indexed_variable(iv)
+
+    def map_constraint(self, constraint: ParametricConstraint, idx: int) -> str:
+        return self._extension_mapper().map_constraint(constraint, idx)
+
+    def map_sequence_relation(self, relation: SequenceRelation, idx: int) -> str:
+        return self._extension_mapper().map_sequence_relation(relation, idx)

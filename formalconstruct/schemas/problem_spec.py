@@ -95,18 +95,19 @@ class VariableBounds(BaseModel):
 
     @model_validator(mode="after")
     def validate_bound_order(self) -> "VariableBounds":
-        if self.lower_bound is not None and self.upper_bound is not None:
-            try:
-                lb = float(self.lower_bound)
-                ub = float(self.upper_bound)
-                if lb > ub:
-                    raise ValueError(
-                        f"lower_bound ({self.lower_bound}) must not exceed "
-                        f"upper_bound ({self.upper_bound})"
-                    )
-            except (ValueError,) as e:
-                if "must not exceed" in str(e):
-                    raise
+        # Only ordered when both bounds are numeric literals; symbolic bounds
+        # (e.g. parameter names) are not comparable and skip the check.
+        if (
+            self.lower_bound is not None
+            and self.upper_bound is not None
+            and _NUMERIC_LITERAL.match(self.lower_bound)
+            and _NUMERIC_LITERAL.match(self.upper_bound)
+            and float(self.lower_bound) > float(self.upper_bound)
+        ):
+            raise ValueError(
+                f"lower_bound ({self.lower_bound}) must not exceed "
+                f"upper_bound ({self.upper_bound})"
+            )
         return self
 
 

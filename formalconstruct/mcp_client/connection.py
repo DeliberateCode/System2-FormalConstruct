@@ -1,7 +1,8 @@
 """AXLE MCP subprocess lifecycle manager.
 
-Manages the ``uvx --from axiom-axle-mcp axle-mcp-server`` subprocess,
-communicating via JSON-RPC 2.0 over stdin/stdout.
+Manages the ``uvx --from axiom-axle-mcp==<version> axle-mcp-server`` subprocess
+(the pinned package spec lives in ``AxleConfig``), communicating via JSON-RPC
+2.0 over stdin/stdout.
 """
 
 from __future__ import annotations
@@ -47,8 +48,8 @@ class AxleMcpConnection:
         self._process = await asyncio.create_subprocess_exec(
             "uvx",
             "--from",
-            "axiom-axle-mcp",
-            "axle-mcp-server",
+            self._config.axle_mcp_package,
+            self._config.axle_mcp_server,
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
