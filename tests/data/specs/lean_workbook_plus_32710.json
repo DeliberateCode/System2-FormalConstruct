@@ -1,0 +1,37 @@
+{
+  "problem_domain": "continuous_optimization",
+  "spaces": [
+    {"name": "RealLine", "base_type": "Real"}
+  ],
+  "variables": [],
+  "indexed_variables": [
+    {
+      "symbol": "x",
+      "index_type": "Nat",
+      "value_type": "Real",
+      "bounds": {"lower_bound": "0", "strict_inequality": true}
+    },
+    {
+      "symbol": "y",
+      "index_type": "Nat",
+      "value_type": "Real",
+      "bounds": {"lower_bound": "0", "strict_inequality": true}
+    }
+  ],
+  "functions": [],
+  "sequence_relations": [
+    {"type": "pointwise", "left": "x", "right": "y", "relation": "<="}
+  ],
+  "objective": {
+    "direction": "inequality",
+    "summation": {
+      "summand": "log((1 + t) / t)",
+      "summand_var": "t",
+      "left_sequence": "x",
+      "right_sequence": "y",
+      "index_var": "k",
+      "index_upper": "n"
+    },
+    "relation": ">="
+  }
+}

@@ -1,0 +1,2 @@
+^\s*formalconstruct(\s.*)?$
+^\s*mktemp\s+-d(\s.*)?$

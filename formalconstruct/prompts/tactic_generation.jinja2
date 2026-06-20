@@ -1,0 +1,20 @@
+Prove the following theorem using Lean 4 tactics.
+
+Theorem:
+{{ theorem_signature }}
+
+Current goal:
+{{ goal_state }}
+
+Available hypotheses:
+{% for h in hypotheses %}
+- {{ h }}
+{% endfor %}
+{% if domain_hints %}
+Domain hints:
+{% for hint in domain_hints %}
+- {{ hint }}
+{% endfor %}
+{% endif %}
+
+Provide the next tactic.
